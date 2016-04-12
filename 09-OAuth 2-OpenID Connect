@@ -1,0 +1,28 @@
+9. Explain, at a very basic level, OAuth 2 + OpenID Connect and the problems it solves.
+
+OpenID Connect was developed to add secure authentication to OAuth 2.0. Large providers i.e. Google, Facebook, Yahoo, etc began using
+OAuth 2.0 as a way to authenticate users with "login with" services so users could use their credentials to authenticate to a variety of
+third-party services. Standard OAuth 2.0 cannot securely satisfy this requirement because of deficiencies within the protocol. OpenID
+Connect solves these deficiencies and allows providers to securely use OAuth 2.0 as an authentication framework. OAuth 2.0 was originally
+developed as an authorization framework which allows a user to grant a third party service access to their data stored on the provider.
+The scenario you described seems like exactly what OAuth 2.0 was developed to do. If you do not plan to offer a "login with" mechanism use
+OAuth 2.0.
+
+If a user will have their own credentials for the third-party services and not use your providers credentials to log into the service, you
+won't need OpenID Connect.
+
+OpenID Connect is just an authentication layer built on top of OAuth2. So regardless of which on you pick, you will need to implement
+OAuth2 (as the common denominator).
+OAuth2 itself is an authorization mechanism (i.e. allows you to check that a token is valid and has a specific set of scopes granted). It
+does not provide authentication out of the box (you can't immediately tell "who" the user is).
+However in many cases, you might be looking to have both authorization and authentication. In this case you need a layer on top of OAuth2
+to provide that. That is most commonly done by have the resource server expose some sort of "Who am I?" endpoint that returns the identity
+of the user associated with the access token.
+OpenID Connect does that and provides a standard way to obtain and represent the user identity (that's the object returned by the UserInfo
+endpoint) as a set of claims.
+It also enables the client app to receive the user info along with the access token (that's the id_token returned by the token endpoint or
+included alongside the authorization code as a signed JWT token, depending on your flow), which saves an HTTP request.
+OpenID Connect provides also a bunch of other things that IMO are of lesser interest (dynamic registration, etc.).
+
+Links:
+http://security.stackexchange.com/questions/94995/oauth-2-vs-openid-connect-to-secure-api

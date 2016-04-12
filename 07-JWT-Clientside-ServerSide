@@ -1,0 +1,23 @@
+7. Explain and demonstrate a system using jwt's, focusing on both client and server side.
+
+JSON Web Tokens (JWT) are a more modern approach to authentication. As the web moves to a greater separation between the client and server,
+JWT provides a wonderful alternative to traditional cookie based authentication models.
+
+JWTs provide a way for clients to authenticate every request without having to maintain a session or repeatedly pass login credentials to the server.
+
+In other ways JWT is a fantastic and simple way to communicate trusted information across untrusted channels.
+
+JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA
+
+Benefits of JWT:
+
+•	They are Compact: Because of its smaller size, JWTs can be sent through an URL, POST parameter, or inside an HTTP header.
+•	 The payload contains all the required information about the user, avoiding the need to query the database more than once
+
+For this question please look at my SEED repository on git.
+
+Here is the link: 	https://github.com/Bente80/Seed/blob/master/config/jwtConfig.js
+
+Links:
+http://blog.brainattica.com/restful-json-api-jwt-go/		Also code ex. Here.
+http://js2016.azurewebsites.net/security2/security2.html#4
