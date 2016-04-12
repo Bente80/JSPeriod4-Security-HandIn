@@ -1,0 +1,43 @@
+1. Explain basic security terms like authentication, authorization, confidentiality, integrity, SSL/TLS and provide examples of how you
+   have used them.
+
+Authentication is confirming the identity of a client. In other terms: Who am I? This can be done though a logIn procedure ex.
+
+Authorization is determing whether an authenticated client is allowed to receive a service or perform an operation.
+In other terms: What can I doo, know that I am logged in?
+
+Confidentiality is protecting a client from disclosure to unauthorized persons, so that they can´t gain access or edit information.
+This can be solved by encryption.
+
+Integrity is to maintain data consistency, so that data cannot be modified. This can be solved by encryption (the process of taking data
+and in coding it into a form that can not be read by unauthorized persons).
+
+SSL (Secure Sockets Layer) & TLS (Transport Layer Security) are cryptographic protocols designed to provide communications security over
+a computer network.
+Today SSL Version 3.0. (the last version) is deprecated and older versions even prohibited.
+
+TLS 1.0 was first defined in January 1999 as an upgrade of SSL Version 3.0. TLS is simply the next progression of SSL which started it all.
+The TLS protocol allows client-server applications to communicate across a network in a way designed to prevent eavesdropping and tampering.
+Ex. Major web sites use TLS to secure all communications between their servers and web browsers as we do when we use online banking.
+TLS include two layers: A Record Protocol and a Handshake Protocol, and these are layered above a transport protocol such as TCP/IP. They
+both use asymmetric and symmetric cryptography techniques.
+TLS is used on top of sessions for applications. This is the case for everything other than projects you just make for yourself for fun
+otherwise they will not be safe.
+
+Ex. SSL with Node/Express and Openshift:
+
+app.use(function (req, res, next) {
+  if ( req.headers['x-forwarded-proto'] === 'http' ) {
+    var tmp= 'https://'+req.headers.host+req.originalUrl;
+    res.redirect(tmp);
+
+  } else {
+    return next();
+  }
+});
+•	Nothing in this proxy will prevent users from trying to make a HTTP request, but the proxy does sets a header x-forwarded-proto which
+    you can use to check for the original protocol and redirect if not HTTPS.
+
+Links: 	https://en.wikipedia.org/wiki/SSL			Question 1
+	http://js2016.azurewebsites.net/security1/security.html#4	Question 1
+	https://en.wikipedia.org/wiki/Transport_Layer_Security		Question 1

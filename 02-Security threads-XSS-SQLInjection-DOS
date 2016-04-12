@@ -1,0 +1,118 @@
+2. Explain basic security threads like: Cross Site Scripting (XSS), SQL Injection and whether something similar to SQL injection is
+   possible with NoSQL databases like MongoDB, and DOS-attacks. Explain/demonstrate ways to cope with these problems.
+   Cross Site Scripting (XSS) is a type of computer security vulnerability typically found in web applications.
+
+XSS enables attackers to inject client-side scripts into web pages viewed by other users.
+A cross-site scripting vulnerability may be used by attackers to bypass access controls such as the same-origin policy.
+Cross-site scripting carried out on websites accounted for roughly 84% of all security vulnerabilities documented by Symantec as of 2007.
+Their effect may range from a petty nuisance to a significant security risk, depending on the sensitivity of the data handled by the
+vulnerable site and the nature of any security mitigation implemented by the site's owner.
+
+A way to prevent ore at least limit this is to:
+
+1.	Encode every datum that is given by a user. If data is not given by a user but supplied via the GET parameter, encode these data too.
+    Even a POST form can contain XSS vectors. So, every time you are going to use a variable value on the website, try cleaning for XSS.
+           These are the main data that must be properly sanitized before being used on your website:
+              The URL, HTTP referrer objects, GET parameters from a form, POST parameters from a form, Window.location, Document.referrer,
+              document.location, document.URL, document.URLUnencoded, cookie data, headers data and database data, if not properly
+              validated on user input.
+2.	Sanitize HTML markup with a Library designed for the job.
+3.	Prevent DOM-based XSS
+
+SQL Injection is an attack method where hacker insert malicious SQL code into a Web form to gain access to resources, applications or
+databases. It has been on the rise with the advancement of automated exploit tools, and the attack method, which can enable data
+manipulation and the spread of malware, is becoming more advanced and popular among attackers.
+An attacker uses SQL injection to manipulate a site's Web-based interfaces and force the database to execute undesirable SQL code,
+enabling data manipulation and spreading malware.
+
+In order to prevent these types of attacks:
+
+1.	Enterprises must implement secure coding best practices and limit Web application coding privileges.
+        Ensure employee security awareness: Make sure that employees who have a hand in website development (as well as dedicated Web
+        developers) are aware of the SQL injection threat and know best practices to keep your servers safe.
+2.	Reduce debugging information.
+        When a Web server experiences an error, make sure details of the error aren't displayed to the user, since this information could
+        help a hacker commit malicious activity and gain the information he or she needs to successfully attack the server.
+3.	Test Web applications regularly.
+        Test Web applications and check Web developers work by sending data through the Web server; if the result is an error message, the
+        application might be susceptible to an SQL injection attack.
+
+* Fore more look here: 	http://www.veracode.com/security/sql-injection
+
+SQL Injection is it possible with NoSQL databases like MongoDB?
+
+NoSQL definitely does not imply zero risk. In fact, NoSQL databases are vulnerable to injection attacks, cross-site request forgery (CSRF)
+and other vulnerabilities.
+One of the common reasons for a SQL injection vulnerability is building the query from string literals which include user input without
+using proper encoding. The JSON query structure makes it harder to achieve in modern data stores like MongoDB. Nevertheless it is still
+possible.
+
+Ex. Let us examine a login form which sends its username and password parameters via an HTTP POST to the backend which constructs the query by concatenating strings.
+
+string query = “{ username: ‘“ + post_username + “’, password: ‘” + post_password + “’ }”
+
+But with malicious input this query can be turned to ignore the password and login into a user account without the password, here is an
+example for malicious input:
+
+username=tolkien’, $or: [ {}, { ‘a’:’a&password=’ } ], $comment:’successful MongoDB injection’
+
+This attack will succeed in any case the username is correct, an assumption which is valid since harvesting user names isn’t hard to achieve.
+The password becomes a redundant part of the query since an empty query {} is always true and the comment in the end does not affect the
+query.
+Another reason is that Javascript execution exposes a dangerous attack surface if un-escaped or not sufficiently escaped user input finds
+its way to the query.
+Furthermore the REST API can expose the NoSQL database to CSRF attacks allowing an attacker to bypass firewalls and other perimeter
+defenses.
+
+In order to prevent these types of injection attacks:
+
+1.	Security scanning to prevent injections -
+        It is recommended to use out of the box encoding tools when building queries. For JSON queries in MongoDB have good native encoding
+        which will terminate the injection risk. It is also recommended to run Dynamic Application Security Testing (DAST) and static code
+        analysis on the application in order to find any injection vulnerabilities if coding guidelines were not followed
+2.	REST API exposure
+        To mitigate the risks of REST API exposure and CSRF attacks, there is a need to control the requests, limiting their format.
+        *It is here important to notice that databases like MongoDB have many third party REST API’s which are encouraged by the main
+         project, some of these are really lacking in the security measures we described here.
+3.	Access Control and Prevention of Privilege Escalation
+        Utilizing proper authentication and role management mechanisms is important for two reasons. First, they allow enforcing the
+        principle of least privilege thus preventing privilege escalation attacks by legitimate users. Second, similarly to SQL injection
+        attacks, proper privilege isolation allows to minimize the damage in case of data store exposure via the above described injections.
+        This can be done by making the data accessible via a web application authorized with a “user” role, while the sensitive entries
+        require the “admin” role, which is never granted via the web interface. This allows scoping the damage in case of attack, ensuring
+        that no administrators’ data is leaked.
+
+DOS-attacks
+Denial of Service (DoS) are attacks against web sites occur when an attacker attempts to make the web server, or servers, unavailable to
+serve up the web sites they host to legitimate visitors. For some time, it was thought that these types of attacks were generally used
+against large corporations, government sites, and activist sites as a form of protest to disrupt their web presence.
+Denial of Service attacks can result in significant loss of service, money and reputation for organizations. Typically, the loss of
+service is the inability of a particular network service, such as e-mail, to be available or the temporary loss of all network
+connectivity and services. An HTTP Denial of Service attack can also destroy programming and files in affected computer systems.
+In some cases, HTTP DoS attacks have forced Web sites accessed by millions of people to temporarily cease operation.
+
+In order to reduce the risk of this type of attack:
+
+1.	Purchase a lot of bandwidth.
+       This is not only the easiest solution, but also the most expensive. If you simply have tons of bandwidth, it makes perpetrating
+       a DoS attack much more difficult because it's more bandwidth that an attacker has to clog.
+2.	Use DoS attack detection technology.
+       Intrusion prevention system and firewall manufacturers now offer DoS protection technologies that include signature detection and
+       connection verification techniques to limit the success of DoS attacks.
+3.	Prepare for DoS response.
+       The use of throttling and rate-limiting technologies can reduce the effects of a DoS attack. One such response mode stops all new
+       inbound connections in the event of a DoS attack, allowing established connections and new outbound connections to continue.
+
+•	DoS protection is more “art” than science, requiring a combination of techniques to limit the impact of such an attack on your
+    organization.
+
+Links:
+https://en.wikipedia.org/wiki/Cross-site_scripting
+http://resources.infosecinstitute.com/how-to-prevent-cross-site-scripting-attacks/
+https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet
+http://searchsecurity.techtarget.com/tutorial/SQL-injection-protection-A-guide-on-how-to-prevent-and-stop-attacks
+http://searchsecurity.techtarget.com/tip/Preventing-and-stopping-SQL-injection-hack-attacks
+https://securityintelligence.com/does-nosql-equal-no-injection/
+https://arxiv.org/ftp/arxiv/papers/1506/1506.04082.pdf
+http://searchsecurity.techtarget.com/answer/How-to-prevent-a-denial-of-service-DoS-attack
+http://www.applicure.com/solutions/prevent-denial-of-service-attacks
